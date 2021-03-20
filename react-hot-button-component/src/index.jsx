@@ -4,26 +4,28 @@ import ReactDOM from 'react-dom';
 class Button extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { clicked: 0, color: 'white' };
+    this.state = { clicked: 0 };
     this.handleClick = this.handleClick.bind(this);
+    this.getClass = this.getClass.bind(this);
   }
 
   handleClick() {
-    const newClickNum = this.state.clicked + 1;
+    this.setState({ clicked: this.state.clicked + 1 });
+  }
 
-    this.setState({ clicked: newClickNum });
-
+  getClass() {
     const colorList = ['darkblue', 'purple', 'hotpink', 'orange', 'yellow', 'white'];
-    let newColor = '';
-    if (Number.isInteger((newClickNum) / 3) && (newClickNum) < 19) {
-      newColor = colorList[(newClickNum) / 3 - 1];
-      this.setState({ color: newColor });
+    let color = 'white';
+    if (this.state.clicked >= 3 && this.state.clicked <= 18) {
+      color = colorList[parseInt(this.state.clicked / 3) - 1];
     }
+    return color;
   }
 
   render() {
+    const colorClass = this.getClass();
     return (
-      <button onClick={this.handleClick} className={this.state.color}>Hot Button</button>
+      <button onClick={this.handleClick} className={colorClass}>Hot Button</button>
     );
   }
 }
