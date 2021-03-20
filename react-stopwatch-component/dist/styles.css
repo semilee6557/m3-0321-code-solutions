@@ -1,0 +1,17 @@
+#root {
+  text-align: center;
+}
+
+.container {
+  flex-direction: column;
+}
+
+.stopWatch {
+  border-radius: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  margin: 1rem;
+}
+
+/* .control {
+} */
