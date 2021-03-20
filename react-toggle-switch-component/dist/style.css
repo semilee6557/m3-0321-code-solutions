@@ -1,0 +1,32 @@
+#container {
+  height: 2rem;
+  width: 4rem;
+  background-color: white;
+}
+
+#inside {
+  height: 2rem;
+  width: 2rem;
+  background-color: green;
+  position: relative;
+  top: -3px;
+  left: 1rem;
+}
+
+#off {
+  height: 2rem;
+  width: 2rem;
+  background-color: gray;
+  position: relative;
+  top: -3px;
+  right: 1rem;
+}
+
+#on {
+  height: 2rem;
+  width: 2rem;
+  background-color: green;
+  position: relative;
+  top: -3px;
+  left: 1rem;
+}
