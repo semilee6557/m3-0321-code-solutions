@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 function PokemonList(props) {
   const pokedex = props.pokedex;
   const listPokedex = pokedex.map(pokedex =>
-    <li key={pokedex.name}>{pokedex.name}</li>
+    <li key={pokedex.number}>{pokedex.name}</li>
   );
   return (
     <ul>{listPokedex}</ul>
