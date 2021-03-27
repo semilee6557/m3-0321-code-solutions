@@ -82,7 +82,6 @@ class Stopwatch extends React.Component {
     let nextLapId = this.state.nextLapId;
     nextLapId++;
     this.setState({ nextLapId: nextLapId });
-    // console.log(this.state);
   }
 
   render() {
@@ -102,11 +101,11 @@ class Stopwatch extends React.Component {
 
 function Table(props) {
   const lap = props.lap;
-  const lapList = lap.map(lap =>
-    <tbody key={lap.id}>
+  const lapList = lap.map(data =>
+    <tbody key={data.time.id}>
      <tr>
-      <th scope="row" >{lap.id}</th>
-      <td>{lap.time}</td>
+      <th scope="row" >{data.time.id}</th>
+      <td>{data.time.time}</td>
       <td>Split</td>
      </tr>
     </tbody>
