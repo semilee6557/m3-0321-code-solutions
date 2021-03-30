@@ -1,0 +1,37 @@
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-row-container,
+.page-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container {
+  width: 60%;
+}
+
+.left-arrow,
+.right-arrow {
+  width: 10%;
+  text-align: center;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.font-size {
+  font-size: 2rem;
+}
+
+.dot {
+  margin: 10px;
+}
