@@ -10,17 +10,9 @@ class AppDrawer extends React.Component {
 
   handleClick(event) {
     event.preventDefault();
-    const targetClassList = event.target.classList;
-    for (let i = 0; i < targetClassList.length; i++) {
-      if (targetClassList[i] === 'menu-icon') {
-        this.setState({ isMenuClicked: true });
-      } else if (targetClassList[i] === 'container') {
-        this.setState({ isMenuClicked: false });
-      }
-    }
-    if (event.target.tagName === 'A') {
-      this.setState({ isMenuClicked: false });
-    }
+    this.setState({
+      isMenuClicked: !this.state.isMenuClicked
+    });
   }
 
   render() {
