@@ -1,59 +1,146 @@
 import React from 'react';
 
+const dots = {
+  blackDot: 'fas fa-circle',
+  whiteDot: 'far fa-circle'
+};
+
+function Tag(props) {
+  const dot = props.dot;
+  const indexOfImage = props.indexOfImage;
+  return (
+    <div className="dot"><i className={`${dot} ${indexOfImage}`} ></i></div>
+  );
+}
+
+class ImageElement extends React.Component {
+  render() {
+    const address = this.props.address;
+    const alt = this.props.alt;
+
+    return (
+      <div className="image-container"><img src={address} alt={alt} /></div>
+    );
+  }
+}
+
+class DotIconLocation extends React.Component {
+  render() {
+    const location = this.props.id;
+    const result = [];
+
+    for (let i = 0; i < 5; i++) {
+      if (i !== location) {
+
+        result.push(<Tag dot={dots.whiteDot} indexOfImage={i.toString()}/>);
+      } else {
+        result.push(<Tag dot={dots.blackDot} indexOfImage={i.toString()}/>);
+      }
+    }
+
+    return (
+    <div className="page-icon-container">
+      {result}
+    </div>
+
+    );
+  }
+
+}
+
 class Carousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       activeInterval: null,
-      currentImg: {},
-      puppyImageAddress: [
-        { address: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=1.00xw:0.669xh;0,0.190xh&resize=1200:*', alt: 'golden', id: '1' },
-        { address: 'https://images.theconversation.com/files/377569/original/file-20210107-17-q20ja9.jpg?ixlib=rb-1.1.0&rect=278%2C340%2C4644%2C3098&q=45&auto=format&w=926&fit=clip', alt: 'husky', id: '1' },
-        { address: 'https://urbananimalveterinary.com/wp-content/uploads/2019/11/puppy.jpg', alt: 'running', id: '3' },
-        { address: 'https://iheartdogs.com/wp-content/uploads/2015/01/4577137586_5f4cf7fbd3_z-1.jpg', alt: 'bulldog', id: '1' },
-        { address: 'https://cdn.royalcanin-weshare-online.io/UCImMmgBaxEApS7LuQnZ/v2/eukanuba-market-image-puppy-beagle?w=5596&h=2317&rect=574,77,1850,1045&auto=compress,enhance', alt: 'beagle', id: '1' }
-      ]
+      currentImgInfo: {},
+      currentIndex: 0,
+      isClickedChangeImageIcon: false
     };
+
     this.imageChange = this.imageChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.resumePlay = this.resumePlay.bind(this);
   }
 
   imageChange() {
+    const images = this.props.puppyImages;
+    let index = this.state.currentIndex;
 
-    const image = this.state.puppyImageAddress;
-    const intervalId = setInterval(function () {
+    this.setState({ currentImgInfo: images[index] });
 
-      for (let i = 0; i < image.length; i++) {
-        if (i === 5) {
-          i = 0;
-        }
-        this.setState({ currentImg: image[i] });
-        this.setState({ currentIndex: i });
+    const intervalId = setInterval(() => {
+      index++;
+      if (index === 5) {
+        index = 0;
       }
+      this.setState({ currentImgInfo: images[index] });
+      this.setState({ currentIndex: index });
     }
     , 3000);
     this.setState({ activeInterval: intervalId });
 
   }
 
-  render() {
-    const currentImg = this.state.currentImg;
-    if (!this.state.activeInterval) {
-      this.imageChange();
+  handleClick(event) {
+    clearInterval(this.state.activeInterval);
+    this.setState({ activeInterval: null });
+    this.setState({ isClickedChangeImageIcon: true });
+
+    const classLists = event.target.classList;
+    if (event.target.tagName === 'I') {
+      for (let i = 0; i < classLists.length; i++) {
+        if (classLists[i] === 'left-arrow') {
+          let previousImgIndex = this.state.currentIndex - 1;
+          if (previousImgIndex === -1) {
+            previousImgIndex = 4;
+          }
+          this.setState({ currentIndex: previousImgIndex });
+        } else if (classLists[i] === 'right-arrow') {
+          let nextImgIndex = this.state.currentIndex + 1;
+          if (nextImgIndex === 5) {
+            nextImgIndex = 0;
+          }
+          this.setState({ currentIndex: nextImgIndex });
+        } else {
+          const getIndexFromDot = parseInt(classLists[2]);
+          this.setState({ currentIndex: getIndexFromDot });
+        }
+      }
+      const images = this.props.puppyImages;
+      const index = this.state.currentIndex;
+
+      this.setState({ currentImgInfo: images[index] });
+
     }
+
+  }
+
+  resumePlay() {
+    this.setState({ isClickedChangeImageIcon: false });
+  }
+
+  render() {
+    if (!this.state.activeInterval && !this.state.isClickedChangeImageIcon) {
+      this.imageChange();
+    } else if (this.state.isClickedChangeImageIcon) {
+      setTimeout(() => {
+        this.resumePlay();
+      }, 3000);
+    }
+
+    const currentImg = this.state.currentImgInfo;
+
     return (
       <div className="container">
       <div className="image-row-container">
-        <div className="left-arrow"><i className="fas fa-chevron-left font-size"></i></div>
-        <div className="image-container"><img src={currentImg.address} alt={currentImg.alt}/></div>
-          <div className="right-arrow"><i className="fas fa-chevron-right font-size"></i></div>
-          </div>
-        <div className="page-icon-container">
-          <div className="dot"><i className="fas fa-circle"></i></div>
-          <div className="dot"><i className="far fa-circle"></i></div>
-          <div className="dot"><i className="far fa-circle"></i></div>
-          <div className="dot"><i className="far fa-circle"></i></div>
-          <div className="dot"><i className="far fa-circle"></i></div>
-        </div>
+          <div className="left-arrow" onClick={this.handleClick}><i className="fas fa-chevron-left font-size left-arrow"></i></div>
+          <ImageElement address={currentImg.address} alt={currentImg.alt} />
+        <div className="right-arrow" onClick={this.handleClick}><i className="fas fa-chevron-right font-size right-arrow"></i></div>
+      </div>
+      <div onClick={this.handleClick} >
+        <DotIconLocation id={this.state.currentIndex} />
+      </div>
       </div>
     );
   }
