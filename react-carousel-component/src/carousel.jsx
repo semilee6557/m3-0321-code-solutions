@@ -64,7 +64,7 @@ class Carousel extends React.Component {
   }
 
   imageChange() {
-    const images = this.props.puppyImages;
+    const images = this.props.images;
     let index = this.state.currentIndex;
 
     this.setState({ currentImgInfo: images[index] });
@@ -107,7 +107,7 @@ class Carousel extends React.Component {
           this.setState({ currentIndex: getIndexFromDot });
         }
       }
-      const images = this.props.puppyImages;
+      const images = this.props.images;
       const index = this.state.currentIndex;
 
       this.setState({ currentImgInfo: images[index] });
@@ -116,11 +116,20 @@ class Carousel extends React.Component {
 
   }
 
+  // nextImg() {
+
+  // }
+
+  // previousImg() {
+  //   console.log('some');
+
+  // }
+
   resumePlay() {
     this.setState({ isClickedChangeImageIcon: false });
   }
 
-  render() {
+  componentDidMount() {
     if (!this.state.activeInterval && !this.state.isClickedChangeImageIcon) {
       this.imageChange();
     } else if (this.state.isClickedChangeImageIcon) {
@@ -128,6 +137,9 @@ class Carousel extends React.Component {
         this.resumePlay();
       }, 3000);
     }
+  }
+
+  render() {
 
     const currentImg = this.state.currentImgInfo;
 
