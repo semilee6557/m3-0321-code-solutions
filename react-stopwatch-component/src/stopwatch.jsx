@@ -87,7 +87,6 @@ class Stopwatch extends React.Component {
   render() {
     const controller = this.changeController();
     const { mins, sec, milisec } = this.displayTime();
-
     return (
       <div className="container">
         <button onClick={this.handleReset} className="stopWatch"> {mins}:{sec}:{milisec} </button>
@@ -100,21 +99,27 @@ class Stopwatch extends React.Component {
 }
 
 function Table(props) {
+
   const lap = props.lap;
-  const lapList = lap.map(data =>
-    <tbody key={data.time.id}>
-     <tr>
-      <th scope="row" >{data.time.id}</th>
-      <td>{data.time.time}</td>
-      <td>Split</td>
-     </tr>
-    </tbody>
+
+  const lapList = lap.map((data, index) => {
+    const id = index + 1;
+    return (<tbody key={id}>
+      <tr>
+       <th scope="row" >{id}</th>
+        <td>{data.time.mins}:{data.time.sec}:{data.time.milisec}</td>
+       <td>Split</td>
+      </tr>
+     </tbody>
+    );
+  }
   );
   return (
     <table className="table">
       {lapList}
     </table>
   );
+
 }
 
 export default Stopwatch;
