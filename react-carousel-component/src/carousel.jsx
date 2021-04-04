@@ -59,7 +59,9 @@ class Carousel extends React.Component {
     };
 
     this.imageChange = this.imageChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.previousImg = this.previousImg.bind(this);
+    this.nextImg = this.nextImg.bind(this);
+    this.handleDotClick = this.handleDotClick.bind(this);
     this.resumePlay = this.resumePlay.bind(this);
   }
 
@@ -82,48 +84,55 @@ class Carousel extends React.Component {
 
   }
 
-  handleClick(event) {
+  handleDotClick(event) {
     clearInterval(this.state.activeInterval);
     this.setState({ activeInterval: null });
     this.setState({ isClickedChangeImageIcon: true });
 
     const classLists = event.target.classList;
-    if (event.target.tagName === 'I') {
-      for (let i = 0; i < classLists.length; i++) {
-        if (classLists[i] === 'left-arrow') {
-          let previousImgIndex = this.state.currentIndex - 1;
-          if (previousImgIndex === -1) {
-            previousImgIndex = 4;
-          }
-          this.setState({ currentIndex: previousImgIndex });
-        } else if (classLists[i] === 'right-arrow') {
-          let nextImgIndex = this.state.currentIndex + 1;
-          if (nextImgIndex === 5) {
-            nextImgIndex = 0;
-          }
-          this.setState({ currentIndex: nextImgIndex });
-        } else {
-          const getIndexFromDot = parseInt(classLists[2]);
-          this.setState({ currentIndex: getIndexFromDot });
-        }
-      }
-      const images = this.props.images;
-      const index = this.state.currentIndex;
-
-      this.setState({ currentImgInfo: images[index] });
-
-    }
-
+    const getIndexFromDot = parseInt(classLists[2]);
+    const images = this.props.images;
+    this.setState({
+      currentIndex: getIndexFromDot,
+      currentImgInfo: images[getIndexFromDot]
+    });
   }
 
-  // nextImg() {
+  nextImg() {
+    clearInterval(this.state.activeInterval);
+    this.setState({ activeInterval: null });
+    this.setState({ isClickedChangeImageIcon: true });
 
-  // }
+    let nextIndex = this.state.currentIndex;
+    nextIndex++;
+    if (nextIndex === 5) {
+      nextIndex = 0;
+    }
+    const images = this.props.images;
+    this.setState({
+      currentIndex: nextIndex,
+      currentImgInfo: images[nextIndex]
+    });
+  }
 
-  // previousImg() {
-  //   console.log('some');
+  previousImg() {
+    clearInterval(this.state.activeInterval);
+    this.setState({ activeInterval: null });
+    this.setState({ isClickedChangeImageIcon: true });
 
-  // }
+    let previousIndex = this.state.currentIndex;
+    previousIndex--;
+    if (previousIndex === -1) {
+      previousIndex = 4;
+    }
+
+    const images = this.props.images;
+    this.setState({
+      currentIndex: previousIndex,
+      currentImgInfo: images[previousIndex]
+    });
+
+  }
 
   resumePlay() {
     this.setState({ isClickedChangeImageIcon: false });
@@ -146,11 +155,11 @@ class Carousel extends React.Component {
     return (
       <div className="container">
       <div className="image-row-container">
-          <div className="left-arrow" onClick={this.handleClick}><i className="fas fa-chevron-left font-size left-arrow"></i></div>
+          <div className="left-arrow" onClick={this.previousImg}><i className="fas fa-chevron-left font-size left-arrow"></i></div>
           <ImageElement address={currentImg.address} alt={currentImg.alt} />
-        <div className="right-arrow" onClick={this.handleClick}><i className="fas fa-chevron-right font-size right-arrow"></i></div>
+          <div className="right-arrow" onClick={this.nextImg}><i className="fas fa-chevron-right font-size right-arrow"></i></div>
       </div>
-      <div onClick={this.handleClick} >
+      <div onClick={this.handleDotClick} >
         <DotIconLocation id={this.state.currentIndex} />
       </div>
       </div>
