@@ -63,16 +63,16 @@ export default class App extends React.Component {
         completedIndex = index;
       }
     });
-    const newTodo = todos;
-    const isCompletedStatus = newTodo[completedIndex].isCompleted;
-    newTodo[completedIndex].isCompleted = !isCompletedStatus;
+    // const newTodo = todos;
+    const isCompletedStatus = !todos[completedIndex].isCompleted;
+    // newTodo[completedIndex].isCompleted = !isCompletedStatus;
 
     fetch(`/api/todos/${todoId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(newTodo)
+      body: JSON.stringify({ isCompleted: isCompletedStatus })
     })
       .then(response => response.json())
       .then(data => {
