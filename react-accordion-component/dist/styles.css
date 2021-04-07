@@ -1,0 +1,12 @@
+
+#root {
+  width: 350px;
+}
+
+.hide {
+  display: none;
+}
+
+.title {
+  background-color: lightgrey;
+}
