@@ -1,26 +1,24 @@
 import React from 'react';
 
-class Title extends React.Component {
-  render() {
-    const title = this.props.title;
-    const id = this.props.id;
-    return (
+function Title(props) {
+
+  const title = props.title;
+  const id = props.id;
+  return (
       <tr className="title">
         <td id={id}>{title}</td>
       </tr>
-    );
-  }
+  );
+
 }
 
-class Content extends React.Component {
-  render() {
-    const content = this.props.content;
-    return (
+function Content(props) {
+  const content = props.content;
+  return (
         <tr>
           <td>{content}</td>
         </tr>
-    );
-  }
+  );
 }
 
 class Accordion extends React.Component {
@@ -41,14 +39,18 @@ class Accordion extends React.Component {
   }
 
   render() {
-    const rows = [];
-    this.props.topics.forEach(topic => {
-      rows.push(<Title id={topic.id} title={topic.title} />);
-      if (this.state.clickedId === topic.id) {
-        rows.push(<Content content={topic.content} />);
-      }
+    const rows = this.props.topics.map(topic => {
+      return (
+        <>
+          <Title id={topic.id} title={topic.title} />
+          {
+            this.state.clickedId === topic.id
+              ? <Content content={topic.content} />
+              : null
+          }
+        </>
+      );
     });
-
     return (
       <table className="table table-bordered" >
         <tbody onClick={this.handleClick}>
