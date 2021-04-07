@@ -35,7 +35,9 @@ export default class App extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ todos: data });
+        const newTodo = [...this.state.todos];
+        newTodo.push(data);
+        this.setState({ todos: newTodo });
       })
       .catch(error => {
         console.error('Error:', error);
@@ -44,12 +46,7 @@ export default class App extends React.Component {
 
   toggleCompleted(todoId) {
     const todos = this.state.todos;
-    let completedIndex = 0;
-    todos.forEach((obj, index, array) => {
-      if (obj.todoId === todoId) {
-        completedIndex = index;
-      }
-    });
+    const completedIndex = todos.findIndex((todo, index) => todo.todoId === todoId);
     const isCompletedStatus = !todos[completedIndex].isCompleted;
 
     fetch(`/api/todos/${todoId}`, {
@@ -61,7 +58,7 @@ export default class App extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        const newTodo = this.state.todos;
+        const newTodo = [...this.state.todos];
         newTodo[completedIndex] = data;
         this.setState({ todos: newTodo });
       })
