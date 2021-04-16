@@ -7,14 +7,10 @@ function errorMiddleware(err, req, res, next) {
       error: err.message
     });
   } else if (err instanceof JsonWebTokenError) {
-    res.status(401).json({
-      error: 'invalid access token'
-    });
+    throw new ClientError(401, 'invalid access token');
   } else {
     console.error(err);
-    res.status(500).json({
-      error: 'an unexpected error occurred'
-    });
+    throw new ClientError(500, 'an unexpected error occurred');
   }
 }
 
