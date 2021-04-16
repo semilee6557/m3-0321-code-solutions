@@ -62,18 +62,14 @@ app.post('/api/auth/sign-in', (req, res, next) => {
   db.query(sql, [username])
     .then(result => {
       const user = result.rows[0];
-      if (!user.userId) {
-        res.status(401).json({
-          error: 'invalid login'
-        });
+      if (!user) {
+        throw new ClientError(401, 'invalid login');
       }
       argon2
         .verify(user.hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
-            res.status(401).json({
-              error: 'invalid login'
-            });
+            throw new ClientError(401, 'invalid login');
           }
           const payload = {
             userId: result.userId,
@@ -81,24 +77,15 @@ app.post('/api/auth/sign-in', (req, res, next) => {
           };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
 
-          const obj = Object.assign({}, payload);
-          obj.token = token;
+          const obj = {
+            user: payload,
+            token: token
+          };
           res.status(201).json(obj);
         })
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({
-            error: 'An unexpected error occurred.'
-          });
-
-        });
+        .catch(err => next(err));
     })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
-      });
-    });
+    .catch(err => next(err));
 
   /**
    * Query the database to find the "userId" and "hashedPassword" for the "username".
