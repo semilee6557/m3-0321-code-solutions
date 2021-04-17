@@ -1,0 +1,29 @@
+1. User can sign up.
+  user click Register now
+  -> 'hashachange' event triggered, that link's href value is "#sign up"
+  ->  App's state is updated with sign up route
+  -> AppContext's route value is passed, and in App's render function, in renderPage function path is "sign up" so <Auth /> is retured.
+
+  user enter username and password and submit "sign up"
+  -> in AuthForm class handleSubmit function called.(this.prop.action's value was "sign up" on Auform jsx component in AuthPage)
+  -> fetch method called and send post request to server
+  -> and password is hashed and stored in database with username
+
+2. User can sign in.
+
+  User enter their ID and password
+  -> handleSubmit function called
+  -> send POST reqeust to server
+  -> database is checking username and password is matching.
+  -> if matching, App's handleSignIn function called, update 'react-context-jwt'(window.localStorage.setItem('react-context-jwt', token))and App' state.
+
+
+3. User can stay signed in (even if they refresh the page).
+  if page load, App class 's componentDidMount founction is called and
+  No change on hashChange event so with renderPage method in App class, path is '' so return Home jsx component.
+  and get token and user from 'react-context-jwt' and set on app's state.
+
+4. User can sign out.
+  User click "Sign Out"
+-> handleSignOut function called
+-> remove data from 'react-context-jwt' and set state as {user: null}
