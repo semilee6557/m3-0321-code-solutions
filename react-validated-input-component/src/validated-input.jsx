@@ -7,7 +7,6 @@ class ValidatedInput extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.validationRule = this.validationRule.bind(this);
   }
 
   handleSubmit(event) {
@@ -17,18 +16,12 @@ class ValidatedInput extends React.Component {
   handleChange(event) {
     const value = event.target.value;
     const name = event.target.name;
-    this.setState({ [name]: value });
+    const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-zA-Z]).+$/gm;
+    const result = value.match(regex);
+    if (result) {
+      this.setState({ [name]: value });
+    }
   }
-
-  // validationRule() {
-  //   const { password } = this.state.password;
-  //   // const reDigit = \d{1};
-  //   // console.log(password);
-  // }
-
-  // componentDidMount() {
-  //   this.validationRule();
-  // }
 
   render() {
     let message = '';
