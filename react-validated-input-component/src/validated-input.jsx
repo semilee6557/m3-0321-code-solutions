@@ -3,7 +3,7 @@ import React from 'react';
 class ValidatedInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { password: '' };
+    this.state = { password: '', regexMessage: '' };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,19 +15,23 @@ class ValidatedInput extends React.Component {
 
   handleChange(event) {
     const value = event.target.value;
-    const name = event.target.name;
     const regex = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-zA-Z]).+$/gm;
     const result = value.match(regex);
-    if (result) {
-      this.setState({ [name]: value });
+    if (!result) {
+      this.setState({ regexMessage: 'Password require to include a digit, a capital letter and a special caracter.' });
+    } else {
+      this.setState({ password: value, regexMessage: '' });
     }
   }
 
   render() {
     let message = '';
     let mark = '';
-    if (!this.state.password) {
+    if (!this.state.password && !this.state.regexMessage) {
       message = 'A password is reqired.';
+      mark = 'fa-times';
+    } else if (!this.state.password) {
+      message = this.state.regexMessage;
       mark = 'fa-times';
     } else if (this.state.password.length < 7) {
       message = 'Your password is too short.';
